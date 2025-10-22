@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+
+{% block title %}تحلیل دیتاست - {{ dataset.name }}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <nav aria-label="breadcrumb" class="mb-4">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'home' %}">خانه</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'dataset_list' %}">دیتاست‌ها</a></li>
+                <li class="breadcrumb-item active">{{ dataset.name }}</li>
+            </ol>
+        </nav>
+
+        <h2>تحلیل دیتاست: {{ dataset.name }}</h2>
+        
+        <!-- اطلاعات پایه -->
+        <div class="card mt-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">
+                    <i class="bi bi-info-circle me-2"></i>اطلاعات پایه
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <strong>ابعاد داده:</strong> {{ basic_info.shape.0 }} ردیف × {{ basic_info.shape.1 }} ستون
+                    </div>
+                    <div class="col-md-3">
+                        <strong>ستون‌ها:</strong> {{ basic_info.columns|length }}
+                    </div>
+                    <div class="col-md-3">
+                        <strong>داده‌های مفقودی:</strong> {{ basic_info.total_missing }}
+                    </div>
+                    <div class="col-md-3">
+                        <strong>تاریخ آپلود:</strong> {{ dataset.uploaded_at|date:"Y/m/d" }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- فرم تحلیل -->
+        <div class="card mt-4">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0">
+                    <i class="bi bi-graph-up me-2"></i>انجام تحلیل
+                </h5>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="{{ form.analysis_type.id_for_label }}" class="form-label">
+                                    <strong>نوع تحلیل</strong>
+                                </label>
+                                {% render_field form.analysis_type class="form-control" %}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="{{ form.columns.id_for_label }}" class="form-label">
+                                    <strong>ستون‌های انتخابی (اختیاری)</strong>
+                                </label>
+                                {% render_field form.columns class="form-control" size="5" %}
+                                <div class="form-text">برای انتخاب چند ستون، کلید Ctrl را نگه دارید</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-play-circle me-2"></i>اجرای تحلیل
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- اطلاعات ستون‌ها -->
+        <div class="card mt-4">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0">
+                    <i class="bi bi-table me-2"></i>اطلاعات ستون‌ها
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>نام ستون</th>
+                                <th>نوع داده</th>
+                                <th>تعداد داده‌های مفقودی</th>
+                                <th>درصد مفقودی</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for col_info in basic_info.columns_info %}
+                            <tr>
+                                <td><strong>{{ col_info.name }}</strong></td>
+                                <td>
+                                    <span class="badge bg-secondary">
+                                        {{ col_info.data_type }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="badge {% if col_info.missing_count > 0 %}bg-warning{% else %}bg-success{% endif %}">
+                                        {{ col_info.missing_count }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="badge {% if col_info.missing_percentage > 10 %}bg-danger{% elif col_info.missing_percentage > 0 %}bg-warning{% else %}bg-success{% endif %}">
+                                        {{ col_info.missing_percentage }}%
+                                    </span>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

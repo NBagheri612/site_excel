@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h2>لیست دیتاست‌ها</h2>
+        
+        {% if datasets %}
+        <div class="table-responsive mt-4">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>نام</th>
+                        <th>تعداد ستون‌ها</th>
+                        <th>تعداد ردیف‌ها</th>
+                        <th>تاریخ آپلود</th>
+                        <th>عملیات</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for dataset in datasets %}
+                    <tr>
+                        <td>{{ dataset.name }}</td>
+                        <td>{{ dataset.columns|length }}</td>
+                        <td>{{ dataset.row_count }}</td>
+                        <td>{{ dataset.uploaded_at|date:"Y/m/d H:i" }}</td>
+                        <td>
+                            <a href="{% url 'dataset_detail' dataset.pk %}" class="btn btn-sm btn-primary">
+                                تحلیل
+                            </a>
+                            <form method="post" action="{% url 'delete_dataset' dataset.pk %}" class="d-inline">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-sm btn-danger" 
+                                        onclick="return confirm('آیا از حذف این دیتاست مطمئنید؟')">
+                                    حذف
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="alert alert-info mt-4">
+            هیچ دیتاستی آپلود نشده است. <a href="{% url 'upload_dataset' %}">اولین دیتاست را آپلود کنید</a>.
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

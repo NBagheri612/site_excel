@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+
+{% block title %}آپلود فایل - تحلیلگر داده{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <!-- Upload Card -->
+        <div class="glass-card p-4 mb-4 animate__animated animate__fadeIn">
+            <div class="text-center mb-4">
+                <div class="feature-icon mx-auto mb-3">
+                    <i class="bi bi-cloud-upload-fill text-white display-6"></i>
+                </div>
+                <h2 class="fw-bold">آپلود فایل اکسل</h2>
+                <p class="text-muted">فایل خود را انتخاب کنید تا تحلیل خودکار آغاز شود</p>
+            </div>
+
+            <form method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+                {% csrf_token %}
+                
+                <!-- Upload Area -->
+                <div class="upload-area mb-4" onclick="document.getElementById('fileInput').click()">
+                    <i class="bi bi-cloud-arrow-up display-1 text-muted mb-3"></i>
+                    <h5 class="mb-2">فایل را اینجا رها کنید یا کلیک کنید</h5>
+                    <p class="text-muted mb-3">فرمت‌های پشتیبانی شده: .xlsx, .xls</p>
+                    <div class="btn btn-outline-primary">انتخاب فایل</div>
+                </div>
+                
+                <!-- Hidden File Input -->
+                <input type="file" name="file" id="fileInput" class="form-control d-none" 
+                       accept=".xlsx,.xls" required onchange="updateFileName(this)">
+                
+                <!-- File Info -->
+                <div id="fileInfo" class="alert alert-info d-none">
+                    <i class="bi bi-file-earmark-excel me-2"></i>
+                    <span id="fileName"></span>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="text-center">
+                    <button type="submit" class="btn btn-gradient btn-lg px-5">
+                        <i class="bi bi-play-circle me-2"></i>
+                        شروع تحلیل
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Features -->
+        <div class="row g-3">
+            <div class="col-md-6">
+                <div class="glass-card p-3 d-flex align-items-center">
+                    <i class="bi bi-check-circle-fill text-success me-3 fs-4"></i>
+                    <div>
+                        <h6 class="mb-1">تحلیل خودکار</h6>
+                        <small class="text-muted">انواع تحلیل‌های آماری</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="glass-card p-3 d-flex align-items-center">
+                    <i class="bi bi-check-circle-fill text-success me-3 fs-4"></i>
+                    <div>
+                        <h6 class="mb-1">گزارش کامل</h6>
+                        <small class="text-muted">نتایج جامع و قابل فهم</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    function updateFileName(input) {
+        const fileInfo = document.getElementById('fileInfo');
+        const fileName = document.getElementById('fileName');
+        
+        if (input.files.length > 0) {
+            fileName.textContent = input.files[0].name;
+            fileInfo.classList.remove('d-none');
+        } else {
+            fileInfo.classList.add('d-none');
+        }
+    }
+
+    // Drag and drop functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        const uploadArea = document.querySelector('.upload-area');
+        const fileInput = document.getElementById('fileInput');
+        
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            uploadArea.addEventListener(eventName, preventDefaults, false);
+        });
+        
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+        
+        ['dragenter', 'dragover'].forEach(eventName => {
+            uploadArea.addEventListener(eventName, highlight, false);
+        });
+        
+        ['dragleave', 'drop'].forEach(eventName => {
+            uploadArea.addEventListener(eventName, unhighlight, false);
+        });
+        
+        function highlight() {
+            uploadArea.style.borderColor = '#6366f1';
+            uploadArea.style.background = 'rgba(99, 102, 241, 0.1)';
+        }
+        
+        function unhighlight() {
+            uploadArea.style.borderColor = '#cbd5e1';
+            uploadArea.style.background = 'rgba(248, 250, 252, 0.8)';
+        }
+        
+        uploadArea.addEventListener('drop', handleDrop, false);
+        
+        function handleDrop(e) {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            fileInput.files = files;
+            updateFileName(fileInput);
+        }
+    });
+</script>
+{% endblock %}

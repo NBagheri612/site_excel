@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+
+{% block title %}خانه - تحلیلگر داده{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="text-center text-white mb-5">
+    <div class="glass-card p-5 animate__animated animate__fadeIn">
+        <div class="floating mb-4">
+            <i class="bi bi-graph-up-arrow display-1 text-primary"></i>
+        </div>
+        <h1 class="display-4 fw-bold mb-3 gradient-text">تحلیلگر داده هوشمند</h1>
+        <p class="lead mb-4">آپلود فایل اکسل و دریافت تحلیل‌های پیشرفته در چند ثانیه</p>
+        
+        <div class="d-flex gap-3 justify-content-center flex-wrap">
+            <a href="{% url 'upload_dataset' %}" class="btn btn-gradient btn-lg pulse-animation">
+                <i class="bi bi-cloud-upload me-2"></i>
+                شروع تحلیل فایل
+            </a>
+            <a href="#features" class="btn btn-outline-light btn-lg">
+                <i class="bi bi-info-circle me-2"></i>
+                راهنمایی
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section id="features" class="row g-4 mb-5">
+    <div class="col-md-4">
+        <div class="glass-card p-4 text-center h-100 animate__animated animate__fadeInUp">
+            <div class="feature-icon">
+                <i class="bi bi-lightning-charge-fill text-white display-6"></i>
+            </div>
+            <h4 class="fw-bold mb-3">تحلیل سریع</h4>
+            <p class="text-muted">آنالیز داده‌ها در کمترین زمان ممکن با الگوریتم‌های بهینه</p>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="glass-card p-4 text-center h-100 animate__animated animate__fadeInUp" style="animation-delay: 0.1s">
+            <div class="feature-icon">
+                <i class="bi bi-bar-chart-fill text-white display-6"></i>
+            </div>
+            <h4 class="fw-bold mb-3">گزارش کامل</h4>
+            <p class="text-muted">دریافت گزارش‌های جامع آماری و تحلیلی از داده‌های شما</p>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="glass-card p-4 text-center h-100 animate__animated animate__fadeInUp" style="animation-delay: 0.2s">
+            <div class="feature-icon">
+                <i class="bi bi-file-earmark-excel-fill text-white display-6"></i>
+            </div>
+            <h4 class="fw-bold mb-3">خروجی Excel</h4>
+            <p class="text-muted">ذخیره نتایج در قالب فایل اکسل برای استفاده آسان</p>
+        </div>
+    </div>
+</section>
+
+<!-- Stats Section -->
+<section class="row g-4 mb-5">
+    <div class="col-12">
+        <h3 class="text-center text-white mb-4">چرا تحلیلگر داده؟</h3>
+    </div>
+    
+    <div class="col-md-3">
+        <div class="stat-card p-4 text-center">
+            <i class="bi bi-speedometer2 display-4 mb-3"></i>
+            <h3 class="fw-bold">سریع</h3>
+            <p class="mb-0">تحلیل در کمتر از ۱۰ ثانیه</p>
+        </div>
+    </div>
+    
+    <div class="col-md-3">
+        <div class="stat-card p-4 text-center">
+            <i class="bi bi-shield-check display-4 mb-3"></i>
+            <h3 class="fw-bold">امن</h3>
+            <p class="mb-0">داده‌های شما محفوظ می‌ماند</p>
+        </div>
+    </div>
+    
+    <div class="col-md-3">
+        <div class="stat-card p-4 text-center">
+            <i class="bi bi-graph-up-arrow display-4 mb-3"></i>
+            <h3 class="fw-bold">حرفه‌ای</h3>
+            <p class="mb-0">تحلیل‌های پیشرفته آماری</p>
+        </div>
+    </div>
+    
+    <div class="col-md-3">
+        <div class="stat-card p-4 text-center">
+            <i class="bi bi-phone display-4 mb-3"></i>
+            <h3 class="fw-bold">واکنش‌گرا</h3>
+            <p class="mb-0">سازگار با تمام دستگاه‌ها</p>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="text-center">
+    <div class="glass-card p-5">
+        <h3 class="fw-bold mb-3">آماده تحلیل داده‌های خود هستید؟</h3>
+        <p class="text-muted mb-4">همین حالا فایل اکسل خود را آپلود کنید و نتایج حرفه‌ای دریافت کنید</p>
+        <a href="{% url 'upload_dataset' %}" class="btn btn-gradient btn-lg">
+            <i class="bi bi-rocket-takeoff me-2"></i>
+            شروع کنید
+        </a>
+    </div>
+</section>
+{% endblock %}
